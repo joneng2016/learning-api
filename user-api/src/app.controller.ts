@@ -18,17 +18,16 @@ export class AppController {
   public constructor(private readonly appService: AppService) {}
 
   @Get()
-  @Header('Content-Type', 'JSON')
   @HttpCode(HttpStatus.OK)
   public getUsers(@Query('name') name) {
-    return this.appService.selectUser(name)
+    return this.appService.selectUser(name);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   public createUser(@Body() body): object {
-    this.appService.createUser(body)
-    return { message: 'User created', body}
+    this.appService.createUser(body);
+    return { message: 'User created', body};
   }
 
   @Put()
