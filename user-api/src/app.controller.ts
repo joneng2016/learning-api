@@ -8,7 +8,6 @@ import {
   HttpCode,
   HttpStatus,
   Delete,
-  Header,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { json2xml } from 'xml-js';
