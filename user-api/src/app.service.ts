@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './models/User';
 import { InjectModel } from '@nestjs/sequelize';
+import { Md5 } from 'ts-md5';
 
 @Injectable()
 export class AppService {
@@ -20,12 +21,12 @@ export class AppService {
   }
 
   public createUser(body: any) {
-    console.log(body);
+    body.password = Md5.hashStr(body.password);
+
     this.user.create(body);
   }
 
   public updateUser(body: any, id: any) {
-    console.log(id)
     this.user.update(body, {
       where: {
         id,

@@ -26,7 +26,7 @@ export class AppController {
   @HttpCode(HttpStatus.CREATED)
   public createUser(@Body() body): object {
     this.appService.createUser(body);
-    return { message: 'User created', body};
+    return { message: 'User created', body };
   }
 
   @Put()
