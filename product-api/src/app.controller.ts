@@ -8,16 +8,42 @@ import {
   HttpCode,
   HttpStatus,
   Delete,
+  Headers,
+  HttpException
 } from '@nestjs/common';
 import { AppService } from './app.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from './models/User';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Controller('products')
 export class AppController {
-  public constructor(private readonly appService: AppService) {}
+  public constructor(
+    @InjectModel(User) 
+    private readonly user: typeof User,
+    private readonly appService: AppService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  public getProducts(@Query('name') name) {
+  public async getProducts(
+    @Query('name') name,
+    @Headers('authorization') authorization
+  ) {
+    let user = this.jwtService.verify(authorization);
+    
+    user =  this.user.findOne({
+      where: {
+        email: user.email,
+        password: user.password,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
     return this.appService.selectProduct(name);
   }
 
