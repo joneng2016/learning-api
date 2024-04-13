@@ -8,7 +8,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { User } from './models/User';
 import { InjectModel } from '@nestjs/sequelize';
-import { Md5 } from 'ts-md5';
 
 @Controller('auth')
 export class AppJwtController {
@@ -26,7 +25,7 @@ export class AppJwtController {
     const user = await this.user.findOne({
       where: {
         email,
-        password: Md5.hashStr(password),
+        password: password,
       },
     });
 
