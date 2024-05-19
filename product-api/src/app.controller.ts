@@ -9,12 +9,12 @@ import {
   HttpStatus,
   Delete,
   Headers,
-  HttpException
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from './models/User';
 import { InjectModel } from '@nestjs/sequelize';
+import authJwt from './helper/authJwt';
 
 @Controller('products')
 export class AppController {
@@ -29,41 +29,62 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   public async getProducts(
     @Query('name') name,
-    @Headers('authorization') authorization
+    @Headers('authorization') authorization,
   ) {
-    let user = this.jwtService.verify(authorization);
-    
-    user =  this.user.findOne({
-      where: {
-        email: user.email,
-        password: user.password,
-      },
+    authJwt({
+      jwtService: this.jwtService,
+      userService: this.user,
+      authorization,
     });
-
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
 
     return this.appService.selectProduct(name);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  public createProduct(@Body() body): object {
+  public createProduct(
+    @Body() body,
+    @Headers('authorization') authorization,
+  ): object {
+    authJwt({
+      jwtService: this.jwtService,
+      userService: this.user,
+      authorization,
+    });
+
     this.appService.createProduct(body);
     return { message: 'Product created', body };
   }
 
   @Put()
   @HttpCode(HttpStatus.OK)
-  public updateProduct(@Body() body, @Query('id') id): object {
+  public updateProduct(
+    @Body() body,
+    @Query('id') id,
+    @Headers('authorization') authorization,
+  ): object {
+    authJwt({
+      jwtService: this.jwtService,
+      userService: this.user,
+      authorization,
+    });
+
     this.appService.updateProduct(body, id);
     return { message: 'Product updated', body };
   }
 
   @Delete()
   @HttpCode(HttpStatus.OK)
-  public deleteProduct(@Query('id') id): object {
+  public deleteProduct(
+    @Query('id') id,
+    @Headers('authorization') authorization,
+  ): object {
+    authJwt({
+      jwtService: this.jwtService,
+      userService: this.user,
+      authorization,
+    });
+
     this.appService.deleteProduct(id);
     return { message: 'Product deleted' };
   }
