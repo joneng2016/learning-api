@@ -1,5 +1,29 @@
 # Start dessas aplicações
 
+## Tradicional
+* Clone o projeto learning-api
+
+```
+git clone https://github.com/joneng2016/learning-api
+```
+
+Feito isso
+
+```
+cd learning-api/product-api
+npm i;
+cd ..
+cd learning-api/user-api
+npm i;
+npm run start;
+```
+Abra um novo powershell
+
+```
+cd .../learning/product-api;
+npm run start;
+```
+## Docker
 * Clone o projeto learning-api
 
 ```
