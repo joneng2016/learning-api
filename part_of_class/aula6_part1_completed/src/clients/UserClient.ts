@@ -26,14 +26,13 @@ export default class UserClient {
     return response.data.length === 0 
       ? { msg: 'No products found' }
       : {
-          msg: 'User found',
-          users: response.data.map((user: any) => {
-            delete user.createdAt;
-            delete user.updatedAt;
+        msg: 'User found',
+        users: response.data.map((user: any) => {
+          delete user.createdAt;
+          delete user.updatedAt;
 
-            return user;
-        }
-      );
-    };
+          return user;
+        })
+      }
   }
 }
